@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="300dp"
+    android:viewportWidth="400"
+    android:viewportHeight="300">
+    <!-- Morning clear sky -->
+    <path android:pathData="M0,0h400v300h-400z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:startX="0" android:startY="0" android:endX="0" android:endY="250" android:type="linear">
+                <item android:color="#FFBFE2EA" android:offset="0"/>
+                <item android:color="#FFF4EFE6" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Paved Borey street & lawn -->
+    <path android:fillColor="#FFDCD4C6" android:pathData="M0,232 L400,232 L400,300 L0,300 Z"/>
+    <path android:fillColor="#FF2A6D5C" android:pathData="M0,218 L400,218 L400,235 L0,235 Z"/>
+    <!-- Twin Borey Homes -->
+    <path android:fillColor="#FFFFFFFF" android:pathData="M48,96 L196,96 L196,222 L48,222 Z"/>
+    <path android:fillColor="#FFF7F2EA" android:pathData="M204,96 L352,96 L352,222 L204,222 Z"/>
+    <!-- Terracotta roofs -->
+    <path android:fillColor="#FFC86D3B" android:pathData="M36,96 L122,52 L204,96 Z"/>
+    <path android:fillColor="#FFB45B2C" android:pathData="M196,96 L278,52 L364,96 Z"/>
+    <!-- Windows & Balconies -->
+    <path android:fillColor="#FF1A3A34" android:pathData="M72,114 L112,114 L112,152 L72,152 Z M132,114 L172,114 L172,152 L132,152 Z M228,114 L268,114 L268,152 L228,152 Z M288,114 L328,114 L328,152 L288,152 Z"/>
+    <path android:fillColor="#FF8AD0D6" android:pathData="M76,118 L108,118 L108,148 L76,148 Z M136,118 L168,118 L168,148 L136,148 Z M232,118 L264,118 L264,148 L232,148 Z M292,118 L324,118 L324,148 L292,148 Z" android:fillAlpha="0.6"/>
+    <!-- Ground floor arches & doors -->
+    <path android:fillColor="#FF0E5A4C" android:pathData="M98,170 L146,170 L146,222 L98,222 Z M254,170 L302,170 L302,222 L254,222 Z"/>
+    <!-- Decorative trees -->
+    <path android:fillColor="#FF1D5D4E" android:pathData="M24,185m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0 M376,185m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
+</vector>

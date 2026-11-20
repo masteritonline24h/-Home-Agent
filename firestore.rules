@@ -1,0 +1,346 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- GLOBAL HELPERS ---
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // --- VALIDATION HELPERS ---
+    function isValidUserProfile(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 60 &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 120)) &&
+             (!('agentTitle' in data) || (data.agentTitle is string && data.agentTitle.size() <= 60)) &&
+             (!('businessHotline' in data) || (data.businessHotline is string && data.businessHotline.size() <= 30)) &&
+             (!('telegramHandle' in data) || (data.telegramHandle is string && data.telegramHandle.size() <= 50)) &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidProperty(data) {
+      return data.ownerId is string && data.ownerId == request.auth.uid &&
+             data.title is string && data.title.size() >= 2 && data.title.size() <= 120 &&
+             data.listingType is string && data.listingType in ['SALE', 'RENT'] &&
+             data.propertyType is string && data.propertyType in ['VILLA', 'CONDO', 'APARTMENT', 'BOREY', 'LAND'] &&
+             data.priceUsd is int && data.priceUsd > 0 && data.priceUsd <= 100000000 &&
+             data.district is string && data.district.size() >= 1 && data.district.size() <= 60 &&
+             data.city is string && data.city.size() >= 1 && data.city.size() <= 60 &&
+             data.bedrooms is int && data.bedrooms >= 0 && data.bedrooms <= 30 &&
+             data.bathrooms is int && data.bathrooms >= 0 && data.bathrooms <= 30 &&
+             data.areaSqm is int && data.areaSqm > 0 && data.areaSqm <= 100000 &&
+             data.description is string && data.description.size() <= 1000 &&
+             data.imageKey is string && data.imageKey in ['villa_luxury', 'condo_skyline', 'borey_townhouse', 'land_plot'] &&
+             data.agentName is string && data.agentName.size() >= 1 && data.agentName.size() <= 60 &&
+             data.agentAgency is string && data.agentAgency.size() >= 1 && data.agentAgency.size() <= 60 &&
+             data.businessHotline is string && data.businessHotline.size() >= 1 && data.businessHotline.size() <= 30 &&
+             (!('telegramHandle' in data) || (data.telegramHandle is string && data.telegramHandle.size() <= 50)) &&
+             data.visibility is string && data.visibility in ['PUBLIC', 'PRIVATE'] &&
+             data.status is string && data.status in ['AVAILABLE', 'RESERVED', 'CLOSED'] &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidFavorite(data, propertyId) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.propertyId is string && data.propertyId == propertyId &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    function isValidInquiry(data) {
+      return data.buyerId is string && data.buyerId.size() >= 1 && data.buyerId.size() <= 128 &&
+             data.buyerName is string && data.buyerName.size() >= 1 && data.buyerName.size() <= 60 &&
+             data.buyerPhone is string && data.buyerPhone.size() >= 1 && data.buyerPhone.size() <= 30 &&
+             data.agentId is string && data.agentId.size() >= 1 && data.agentId.size() <= 128 &&
+             data.agentName is string && data.agentName.size() >= 1 && data.agentName.size() <= 60 &&
+             data.propertyId is string && isValidId(data.propertyId) &&
+             data.propertyTitle is string && data.propertyTitle.size() >= 1 && data.propertyTitle.size() <= 120 &&
+             data.inquiryType is string && data.inquiryType in ['VIEWING', 'QUESTION', 'OFFER'] &&
+             data.preferredDate is string && data.preferredDate.size() <= 40 &&
+             data.message is string && data.message.size() >= 1 && data.message.size() <= 500 &&
+             (!('agentReply' in data) || (data.agentReply is string && data.agentReply.size() <= 500)) &&
+             data.status is string && data.status in ['PENDING', 'SCHEDULED', 'REPLIED', 'CLOSED'] &&
+             data.participantIds is list &&
+             data.participantIds.size() >= 1 && data.participantIds.size() <= 2 &&
+             data.participantIds[0] is string &&
+             data.buyerId in data.participantIds &&
+             data.agentId in data.participantIds &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidAgentReview(data) {
+      return data.agentId is string && isValidId(data.agentId) &&
+             data.agentName is string && data.agentName.size() >= 1 && data.agentName.size() <= 60 &&
+             data.reviewerId is string && data.reviewerId == request.auth.uid &&
+             data.reviewerName is string && data.reviewerName.size() >= 1 && data.reviewerName.size() <= 60 &&
+             data.rating is int && data.rating >= 1 && data.rating <= 5 &&
+             data.comment is string && data.comment.size() >= 1 && data.comment.size() <= 500 &&
+             data.visibility is string && data.visibility == 'PUBLIC' &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidChatThread(data) {
+      return data.buyerId is string && isValidId(data.buyerId) &&
+             data.buyerName is string && data.buyerName.size() >= 1 && data.buyerName.size() <= 60 &&
+             data.agentId is string && isValidId(data.agentId) &&
+             data.agentName is string && data.agentName.size() >= 1 && data.agentName.size() <= 60 &&
+             data.propertyId is string && isValidId(data.propertyId) &&
+             data.propertyTitle is string && data.propertyTitle.size() >= 1 && data.propertyTitle.size() <= 120 &&
+             data.lastMessage is string && data.lastMessage.size() <= 500 &&
+             data.lastSenderId is string && data.lastSenderId == request.auth.uid &&
+             data.participantIds is list &&
+             data.participantIds.size() >= 1 && data.participantIds.size() <= 2 &&
+             data.participantIds[0] is string &&
+             data.buyerId in data.participantIds &&
+             data.agentId in data.participantIds &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidChatMessage(data) {
+      return data.chatId is string && isValidId(data.chatId) &&
+             data.senderId is string && data.senderId == request.auth.uid &&
+             data.senderName is string && data.senderName.size() >= 1 && data.senderName.size() <= 60 &&
+             data.text is string && data.text.size() >= 1 && data.text.size() <= 1000 &&
+             data.messageType is string && data.messageType in ['TEXT', 'VIEWING_REQUEST'] &&
+             (!('preferredDate' in data) || (data.preferredDate is string && data.preferredDate.size() <= 40)) &&
+             data.participantIds is list &&
+             data.participantIds.size() >= 1 && data.participantIds.size() <= 2 &&
+             data.participantIds[0] is string &&
+             request.auth.uid in data.participantIds &&
+             data.createdAt is timestamp && data.createdAt <= request.time;
+    }
+
+    // --- COLLECTIONS ---
+    match /users/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       incoming().keys().hasAll(['userId', 'displayName', 'createdAt', 'updatedAt']) &&
+                       incoming().keys().hasOnly(['userId', 'displayName', 'email', 'agentTitle', 'businessHotline', 'telegramHandle', 'createdAt', 'updatedAt']) &&
+                       isValidUserProfile(incoming());
+      allow update: if isOwner(userId) &&
+                       isValidId(userId) &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'agentTitle', 'businessHotline', 'telegramHandle', 'updatedAt']);
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /favorites/{propertyId} {
+        allow get: if isOwner(userId) && isValidId(propertyId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) &&
+                         isValidId(propertyId) &&
+                         incoming().keys().hasAll(['userId', 'propertyId', 'createdAt']) &&
+                         incoming().keys().hasOnly(['userId', 'propertyId', 'createdAt']) &&
+                         isValidFavorite(incoming(), propertyId) &&
+                         exists(/databases/$(database)/documents/properties/$(propertyId));
+        allow update: if false;
+        allow delete: if isOwner(userId) && isValidId(propertyId);
+      }
+    }
+
+    match /properties/{propertyId} {
+      allow get: if isSignedIn() && isValidId(propertyId) &&
+                    (existing().ownerId == request.auth.uid || existing().visibility == 'PUBLIC');
+      allow list: if isSignedIn() &&
+                     (resource.data.ownerId == request.auth.uid || resource.data.visibility == 'PUBLIC');
+
+      allow create: if isSignedIn() &&
+                       isValidId(propertyId) &&
+                       incoming().keys().hasAll([
+                         'ownerId', 'title', 'listingType', 'propertyType', 'priceUsd',
+                         'district', 'city', 'bedrooms', 'bathrooms', 'areaSqm',
+                         'description', 'imageKey', 'agentName', 'agentAgency',
+                         'businessHotline', 'visibility', 'status', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'ownerId', 'title', 'listingType', 'propertyType', 'priceUsd',
+                         'district', 'city', 'bedrooms', 'bathrooms', 'areaSqm',
+                         'description', 'imageKey', 'agentName', 'agentAgency',
+                         'businessHotline', 'telegramHandle', 'visibility', 'status',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidProperty(incoming());
+
+      allow update: if isSignedIn() &&
+                       isValidId(propertyId) &&
+                       isValidProperty(incoming()) &&
+                       existing().ownerId == request.auth.uid &&
+                       incoming().ownerId == existing().ownerId &&
+                       incoming().createdAt == existing().createdAt &&
+                       existing().status != 'CLOSED' &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'title', 'listingType', 'propertyType', 'priceUsd',
+                         'district', 'city', 'bedrooms', 'bathrooms', 'areaSqm',
+                         'description', 'imageKey', 'agentName', 'agentAgency',
+                         'businessHotline', 'telegramHandle', 'visibility', 'status', 'updatedAt'
+                       ]);
+
+      allow delete: if isSignedIn() && isValidId(propertyId) && existing().ownerId == request.auth.uid;
+    }
+
+    match /inquiries/{inquiryId} {
+      allow get: if isSignedIn() && isValidId(inquiryId) &&
+                    request.auth.uid in existing().participantIds;
+      allow list: if isSignedIn() &&
+                     request.auth.uid in resource.data.participantIds;
+
+      allow create: if isSignedIn() &&
+                       isValidId(inquiryId) &&
+                       incoming().buyerId == request.auth.uid &&
+                       incoming().status == 'PENDING' &&
+                       (!('agentReply' in incoming()) || incoming().agentReply == '') &&
+                       incoming().keys().hasAll([
+                         'buyerId', 'buyerName', 'buyerPhone', 'agentId', 'agentName',
+                         'propertyId', 'propertyTitle', 'inquiryType', 'preferredDate',
+                         'message', 'status', 'participantIds', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'buyerId', 'buyerName', 'buyerPhone', 'agentId', 'agentName',
+                         'propertyId', 'propertyTitle', 'inquiryType', 'preferredDate',
+                         'message', 'agentReply', 'status', 'participantIds',
+                         'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidInquiry(incoming()) &&
+                       exists(/databases/$(database)/documents/properties/$(incoming().propertyId)) &&
+                       get(/databases/$(database)/documents/properties/$(incoming().propertyId)).data.ownerId == incoming().agentId;
+
+      allow update: if isSignedIn() &&
+                       isValidId(inquiryId) &&
+                       isValidInquiry(incoming()) &&
+                       existing().status != 'CLOSED' &&
+                       incoming().buyerId == existing().buyerId &&
+                       incoming().agentId == existing().agentId &&
+                       incoming().propertyId == existing().propertyId &&
+                       incoming().participantIds == existing().participantIds &&
+                       incoming().createdAt == existing().createdAt &&
+                       (
+                         (request.auth.uid == existing().agentId &&
+                          incoming().diff(existing()).affectedKeys().hasOnly(['agentReply', 'status', 'updatedAt'])) ||
+                         (request.auth.uid == existing().buyerId &&
+                          incoming().status in ['PENDING', 'CLOSED'] &&
+                          incoming().diff(existing()).affectedKeys().hasOnly(['message', 'preferredDate', 'status', 'updatedAt']))
+                       );
+
+      allow delete: if isSignedIn() && isValidId(inquiryId) && request.auth.uid == existing().buyerId;
+    }
+
+    match /agent_reviews/{reviewId} {
+      allow get: if isSignedIn() && isValidId(reviewId) &&
+                    (existing().reviewerId == request.auth.uid || existing().visibility == 'PUBLIC');
+      allow list: if isSignedIn() &&
+                     (resource.data.reviewerId == request.auth.uid || resource.data.visibility == 'PUBLIC');
+
+      allow create: if isSignedIn() &&
+                       isValidId(reviewId) &&
+                       incoming().keys().hasAll([
+                         'agentId', 'agentName', 'reviewerId', 'reviewerName',
+                         'rating', 'comment', 'visibility', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'agentId', 'agentName', 'reviewerId', 'reviewerName',
+                         'rating', 'comment', 'visibility', 'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidAgentReview(incoming());
+
+      allow update: if isSignedIn() &&
+                       isValidId(reviewId) &&
+                       isValidAgentReview(incoming()) &&
+                       existing().reviewerId == request.auth.uid &&
+                       incoming().reviewerId == existing().reviewerId &&
+                       incoming().agentId == existing().agentId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['rating', 'comment', 'updatedAt']);
+
+      allow delete: if isSignedIn() && isValidId(reviewId) && existing().reviewerId == request.auth.uid;
+    }
+
+    match /chats/{chatId} {
+      allow get: if isSignedIn() && isValidId(chatId) &&
+                    (resource == null || request.auth.uid in resource.data.participantIds);
+      allow list: if isSignedIn() &&
+                     request.auth.uid in resource.data.participantIds;
+
+      allow create: if isSignedIn() &&
+                       isValidId(chatId) &&
+                       incoming().buyerId == request.auth.uid &&
+                       incoming().keys().hasAll([
+                         'buyerId', 'buyerName', 'agentId', 'agentName',
+                         'propertyId', 'propertyTitle', 'lastMessage', 'lastSenderId',
+                         'participantIds', 'createdAt', 'updatedAt'
+                       ]) &&
+                       incoming().keys().hasOnly([
+                         'buyerId', 'buyerName', 'agentId', 'agentName',
+                         'propertyId', 'propertyTitle', 'lastMessage', 'lastSenderId',
+                         'participantIds', 'createdAt', 'updatedAt'
+                       ]) &&
+                       isValidChatThread(incoming()) &&
+                       exists(/databases/$(database)/documents/properties/$(incoming().propertyId)) &&
+                       get(/databases/$(database)/documents/properties/$(incoming().propertyId)).data.ownerId == incoming().agentId;
+
+      allow update: if isSignedIn() &&
+                       isValidId(chatId) &&
+                       isValidChatThread(incoming()) &&
+                       request.auth.uid in existing().participantIds &&
+                       incoming().buyerId == existing().buyerId &&
+                       incoming().agentId == existing().agentId &&
+                       incoming().propertyId == existing().propertyId &&
+                       incoming().participantIds == existing().participantIds &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly(['lastMessage', 'lastSenderId', 'updatedAt']);
+
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow get: if isSignedIn() && isValidId(chatId) && isValidId(messageId) &&
+                      request.auth.uid in existing().participantIds;
+        allow list: if isSignedIn() && isValidId(chatId) &&
+                       request.auth.uid in resource.data.participantIds;
+
+        allow create: if isSignedIn() &&
+                         isValidId(chatId) &&
+                         isValidId(messageId) &&
+                         incoming().chatId == chatId &&
+                         incoming().keys().hasAll([
+                           'chatId', 'senderId', 'senderName', 'text',
+                           'messageType', 'participantIds', 'createdAt'
+                         ]) &&
+                         incoming().keys().hasOnly([
+                           'chatId', 'senderId', 'senderName', 'text',
+                           'messageType', 'preferredDate', 'participantIds', 'createdAt'
+                         ]) &&
+                         isValidChatMessage(incoming()) &&
+                         exists(/databases/$(database)/documents/chats/$(chatId)) &&
+                         request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participantIds;
+
+        allow update, delete: if false;
+      }
+    }
+  }
+}

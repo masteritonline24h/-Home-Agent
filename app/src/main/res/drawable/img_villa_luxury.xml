@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="300dp"
+    android:viewportWidth="400"
+    android:viewportHeight="300">
+    <!-- Sunset warm sky -->
+    <path android:pathData="M0,0h400v300h-400z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:startX="0" android:startY="0" android:endX="400" android:endY="240" android:type="linear">
+                <item android:color="#FFF7D8B5" android:offset="0"/>
+                <item android:color="#FFE8B088" android:offset="0.55"/>
+                <item android:color="#FF1E5B4E" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Glowing sun -->
+    <path android:fillColor="#FFFFEBC2" android:pathData="M310,68m-34,0a34,34 0,1 1,68 0a34,34 0,1 1,-68 0" android:fillAlpha="0.85"/>
+    <!-- Distant foliage -->
+    <path android:fillColor="#FF194B40" android:pathData="M0,185 Q60,150 120,175 T250,170 T400,182 L400,250 L0,250 Z"/>
+    <!-- Lawn & Courtyard -->
+    <path android:fillColor="#FF143E35" android:pathData="M0,225 L400,225 L400,300 L0,300 Z"/>
+    <!-- Courtyard Pool -->
+    <path android:fillColor="#FF3BA3A8" android:pathData="M55,244 L235,244 L250,282 L40,282 Z"/>
+    <path android:fillColor="#FF8DE2E6" android:pathData="M62,252 L226,252 L230,256 L58,256 Z" android:fillAlpha="0.5"/>
+    <!-- Modern Villa Main Volume -->
+    <path android:fillColor="#FFF8F3EA" android:pathData="M90,115 L315,115 L315,232 L90,232 Z"/>
+    <!-- Roof overhang & Khmer pitch accent -->
+    <path android:fillColor="#FF2B2420" android:pathData="M72,115 L202,68 L332,115 L322,122 L202,80 L82,122 Z"/>
+    <path android:fillColor="#FFC86D3B" android:pathData="M196,58 L202,48 L208,58 L205,72 L199,72 Z"/>
+    <!-- Teak wood upper balcony & louvers -->
+    <path android:fillColor="#FFB6703D" android:pathData="M108,128 L204,128 L204,172 L108,172 Z"/>
+    <path android:fillColor="#FF3A2C22" android:pathData="M116,134 L126,134 L126,168 L116,168 Z M134,134 L144,134 L144,168 L134,168 Z M152,134 L162,134 L162,168 L152,168 Z"/>
+    <!-- Warm glowing floor-to-ceiling windows -->
+    <path android:fillColor="#FFFFCA7A" android:pathData="M218,128 L296,128 L296,172 L218,172 Z"/>
+    <path android:fillColor="#FFFFD896" android:pathData="M112,184 L198,184 L198,232 L112,232 Z"/>
+    <path android:fillColor="#FF252E2C" android:pathData="M220,184 L294,184 L294,232 L220,232 Z"/>
+    <path android:fillColor="#FFFFC36B" android:pathData="M226,188 L288,188 L288,228 L226,228 Z" android:fillAlpha="0.85"/>
+    <!-- Palm silhouette -->
+    <path android:fillColor="#FF0D332B" android:pathData="M348,235 L356,235 L352,138 Z"/>
+    <path android:fillColor="#FF0E4438" android:pathData="M352,138 Q320,120 302,142 Q330,136 352,145 Q375,134 396,148 Q380,124 352,138 Z"/>
+</vector>

@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ផ្ទះខ្មែរ</string>
+    <string name="app_tagline">ភ្នាក់ងារលក់ និងជួលអចលនទ្រព្យ</string>
+    <string name="auth_headline">ស្វែងរកផ្ទះក្នុងក្តីស្រមៃ ងាយស្រួលទំនាក់ទំនងភ្នាក់ងារ</string>
+    <string name="auth_subtitle">ប្រមូលផ្តុំវីឡា ខុនដូ ផ្ទះល្វែង និងដីឡូតិ៍ ជាមួយព័ត៌មានច្បាស់លាស់ និងការណាត់ជួបភ្លាមៗ</string>
+    <string name="sign_in_with_google">ចូលប្រើដោយគណនី Google</string>
+    <string name="nav_explore">ស្វែងរក</string>
+    <string name="nav_saved">រក្សាទុក</string>
+    <string name="nav_inquiries">ទំនាក់ទំនង</string>
+    <string name="nav_agent">ភ្នាក់ងារ</string>
+    <string name="search_placeholder">ស្វែងរកទីតាំង ខណ្ឌ ឬឈ្មោះផ្ទះ...</string>
+    <string name="filter_all">ទាំងអស់</string>
+    <string name="filter_sale">សម្រាប់លក់</string>
+    <string name="filter_rent">សម្រាប់ជួល</string>
+    <string name="post_property">ដាក់លក់ / ជួលថ្មី</string>
+    <string name="load_starter_portfolio">បន្ថែមបញ្ជីផ្ទះគំរូ</string>
+    <string name="contact_agent">ទំនាក់ទំនងភ្នាក់ងារ</string>
+    <string name="call_agent">ហៅទូរសព្ទ</string>
+    <string name="telegram_agent">Telegram</string>
+    <string name="request_viewing">ស្នើសុំមើលផ្ទះ</string>
+    <string name="sign_out">ចាកចេញពីគណនី</string>
+</resources>

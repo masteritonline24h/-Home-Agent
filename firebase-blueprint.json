@@ -1,0 +1,344 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user or real estate agent profile.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the user or agent."
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address."
+        },
+        "agentTitle": {
+          "type": "string",
+          "description": "Optional agent professional title."
+        },
+        "businessHotline": {
+          "type": "string",
+          "description": "Optional business hotline for agent listings."
+        },
+        "telegramHandle": {
+          "type": "string",
+          "description": "Optional Telegram username for agent contact."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was last updated."
+        }
+      },
+      "required": ["userId", "displayName", "createdAt", "updatedAt"]
+    },
+    "Property": {
+      "title": "Property",
+      "description": "Real estate listing for sale or rent.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the listing agent."
+        },
+        "title": {
+          "type": "string",
+          "description": "Property listing title."
+        },
+        "listingType": {
+          "type": "string",
+          "enum": ["SALE", "RENT"],
+          "description": "Whether the property is for sale or rent."
+        },
+        "propertyType": {
+          "type": "string",
+          "enum": ["VILLA", "CONDO", "APARTMENT", "BOREY", "LAND"],
+          "description": "Architectural category of the property."
+        },
+        "priceUsd": {
+          "type": "integer",
+          "description": "Price in USD (total price for sale, monthly for rent)."
+        },
+        "district": {
+          "type": "string",
+          "description": "Neighborhood / District / Khan name."
+        },
+        "city": {
+          "type": "string",
+          "description": "City / Province name."
+        },
+        "bedrooms": {
+          "type": "integer",
+          "description": "Number of bedrooms."
+        },
+        "bathrooms": {
+          "type": "integer",
+          "description": "Number of bathrooms."
+        },
+        "areaSqm": {
+          "type": "integer",
+          "description": "Property area in square meters."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed Khmer/English property description."
+        },
+        "imageKey": {
+          "type": "string",
+          "enum": ["villa_luxury", "condo_skyline", "borey_townhouse", "land_plot"],
+          "description": "Drawable illustration key for the property."
+        },
+        "agentName": {
+          "type": "string",
+          "description": "Listing agent name."
+        },
+        "agentAgency": {
+          "type": "string",
+          "description": "Agency or brokerage name."
+        },
+        "businessHotline": {
+          "type": "string",
+          "description": "Agent business hotline."
+        },
+        "telegramHandle": {
+          "type": "string",
+          "description": "Optional agent Telegram handle."
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["PUBLIC", "PRIVATE"],
+          "description": "Marketplace visibility."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["AVAILABLE", "RESERVED", "CLOSED"],
+          "description": "Listing availability status."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when listing was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when listing was last updated."
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "listingType",
+        "propertyType",
+        "priceUsd",
+        "district",
+        "city",
+        "bedrooms",
+        "bathrooms",
+        "areaSqm",
+        "description",
+        "imageKey",
+        "agentName",
+        "agentAgency",
+        "businessHotline",
+        "visibility",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "User's bookmarked property reference.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user."
+        },
+        "propertyId": {
+          "type": "string",
+          "description": "Document ID of the favorited property."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when bookmarked."
+        }
+      },
+      "required": ["userId", "propertyId", "createdAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Buyer viewing request or message to a real estate agent.",
+      "type": "object",
+      "properties": {
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "buyerPhone": { "type": "string" },
+        "agentId": { "type": "string" },
+        "agentName": { "type": "string" },
+        "propertyId": { "type": "string" },
+        "propertyTitle": { "type": "string" },
+        "inquiryType": {
+          "type": "string",
+          "enum": ["VIEWING", "QUESTION", "OFFER"]
+        },
+        "preferredDate": { "type": "string" },
+        "message": { "type": "string" },
+        "agentReply": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "SCHEDULED", "REPLIED", "CLOSED"]
+        },
+        "participantIds": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "buyerId",
+        "buyerName",
+        "buyerPhone",
+        "agentId",
+        "agentName",
+        "propertyId",
+        "propertyTitle",
+        "inquiryType",
+        "preferredDate",
+        "message",
+        "status",
+        "participantIds",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AgentReview": {
+      "title": "AgentReview",
+      "description": "Client rating and review for a real estate agent.",
+      "type": "object",
+      "properties": {
+        "agentId": { "type": "string" },
+        "agentName": { "type": "string" },
+        "reviewerId": { "type": "string" },
+        "reviewerName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "visibility": {
+          "type": "string",
+          "enum": ["PUBLIC"]
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "agentId",
+        "agentName",
+        "reviewerId",
+        "reviewerName",
+        "rating",
+        "comment",
+        "visibility",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatThread": {
+      "title": "ChatThread",
+      "description": "Direct messaging thread between a buyer and an agent for a property.",
+      "type": "object",
+      "properties": {
+        "buyerId": { "type": "string" },
+        "buyerName": { "type": "string" },
+        "agentId": { "type": "string" },
+        "agentName": { "type": "string" },
+        "propertyId": { "type": "string" },
+        "propertyTitle": { "type": "string" },
+        "lastMessage": { "type": "string" },
+        "lastSenderId": { "type": "string" },
+        "participantIds": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "buyerId",
+        "buyerName",
+        "agentId",
+        "agentName",
+        "propertyId",
+        "propertyTitle",
+        "lastMessage",
+        "lastSenderId",
+        "participantIds",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Individual message inside a direct chat thread.",
+      "type": "object",
+      "properties": {
+        "chatId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "messageType": {
+          "type": "string",
+          "enum": ["TEXT", "VIEWING_REQUEST"]
+        },
+        "preferredDate": { "type": "string" },
+        "participantIds": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "chatId",
+        "senderId",
+        "senderName",
+        "text",
+        "messageType",
+        "participantIds",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private profile documents owned by each user."
+    },
+    "/users/{userId}/favorites/{propertyId}": {
+      "schema": { "$ref": "#/entities/Favorite" },
+      "description": "Bookmarked property references scoped to the user."
+    },
+    "/properties/{propertyId}": {
+      "schema": { "$ref": "#/entities/Property" },
+      "description": "Real estate listings for sale and rent."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Viewing requests and inquiries between buyers and agents."
+    },
+    "/agent_reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/AgentReview" },
+      "description": "Public client reviews and star ratings for agents."
+    },
+    "/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/ChatThread" },
+      "description": "Direct messaging threads between buyers and agents."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Real-time messages inside a direct chat thread."
+    }
+  }
+}

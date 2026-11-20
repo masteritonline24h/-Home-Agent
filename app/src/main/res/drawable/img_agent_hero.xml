@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="640dp"
+    android:height="360dp"
+    android:viewportWidth="640"
+    android:viewportHeight="360">
+    <path android:pathData="M0,0h640v360h-640z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:startX="0" android:startY="0" android:endX="640" android:endY="360" android:type="linear">
+                <item android:color="#FF0E5A4C" android:offset="0"/>
+                <item android:color="#FF157664" android:offset="0.6"/>
+                <item android:color="#FF24967E" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Subtle sunlit geometric waves & architectural skyline silhouettes -->
+    <path android:fillColor="#FFFFFFFF" android:pathData="M480,-20 A160,160 0 1,0 640,180 L640,-20 Z" android:fillAlpha="0.06"/>
+    <path android:fillColor="#FFE8A855" android:pathData="M530,54m-38,0a38,38 0,1 1,76 0a38,38 0,1 1,-76 0" android:fillAlpha="0.22"/>
+    <path android:fillColor="#FF094237" android:pathData="M40,210 L130,150 L220,210 L220,360 L40,360 Z" android:fillAlpha="0.5"/>
+    <path android:fillColor="#FF0A493D" android:pathData="M190,175 L290,110 L390,175 L390,360 L190,360 Z" android:fillAlpha="0.7"/>
+    <path android:fillColor="#FF08392F" android:pathData="M360,195 L460,135 L560,195 L560,360 L360,360 Z" android:fillAlpha="0.65"/>
+    <!-- Warm illuminated windows -->
+    <path android:fillColor="#FFF6EFE2" android:pathData="M276,200 L304,200 L304,234 L276,234 Z M446,216 L474,216 L474,250 L446,250 Z" android:fillAlpha="0.7"/>
+</vector>

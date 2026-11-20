@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="300dp"
+    android:viewportWidth="400"
+    android:viewportHeight="300">
+    <!-- Twilight skyline gradient -->
+    <path android:pathData="M0,0h400v300h-400z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:startX="0" android:startY="0" android:endX="0" android:endY="300" android:type="linear">
+                <item android:color="#FF173A4A" android:offset="0"/>
+                <item android:color="#FF3A6C7A" android:offset="0.5"/>
+                <item android:color="#FFE8A677" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Riverfront reflection -->
+    <path android:fillColor="#FF224B5B" android:pathData="M0,220 L400,220 L400,300 L0,300 Z"/>
+    <path android:fillColor="#FFFFC78E" android:pathData="M40,248 L120,248 L120,252 L40,252 Z M180,262 L270,262 L270,266 L180,266 Z" android:fillAlpha="0.45"/>
+    <!-- Surrounding city skyline silhouettes -->
+    <path android:fillColor="#FF132C38" android:pathData="M18,130 L68,130 L68,220 L18,220 Z M78,105 L128,105 L128,220 L78,220 Z M280,115 L335,115 L335,220 L280,220 Z M345,145 L388,145 L388,220 L345,220 Z"/>
+    <!-- Hero Condominium Tower -->
+    <path android:fillColor="#FFF2EFE9" android:pathData="M142,46 L258,46 L258,230 L142,230 Z"/>
+    <path android:fillColor="#FF0E5A4C" android:pathData="M142,46 L258,46 L258,60 L142,60 Z"/>
+    <path android:fillColor="#FFC86D3B" android:pathData="M184,34 L216,34 L216,46 L184,46 Z"/>
+    <!-- Glass balconies & warm lit interiors -->
+    <path android:fillColor="#FFFFD48C" android:pathData="M154,72 L194,72 L194,96 L154,96 Z M206,72 L246,72 L246,96 L206,96 Z M154,108 L194,108 L194,132 L154,132 Z M206,108 L246,108 L246,132 L206,132 Z M154,144 L194,144 L194,168 L154,168 Z M206,144 L246,144 L246,168 L206,168 Z M154,180 L194,180 L194,204 L154,204 Z M206,180 L246,180 L246,204 L206,204 Z"/>
+    <!-- Balcony horizontal slabs -->
+    <path android:fillColor="#FF25343A" android:pathData="M138,96 L262,96 L262,102 L138,102 Z M138,132 L262,132 L262,138 L138,138 Z M138,168 L262,168 L262,174 L138,174 Z M138,204 L262,204 L262,210 L138,210 Z"/>
+</vector>

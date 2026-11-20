@@ -1,0 +1,6 @@
+{
+  "name": "ផ្ទះខ្មែរ",
+  "description": "កម្មវិធីភ្នាក់ងារដាក់លក់ និងជួលអចលនទ្រព្យ សម្រាប់ស្វែងរកផ្ទះ និងទំនាក់ទំនងជាមួយភ្នាក់ងារដោយងាយស្រួល",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

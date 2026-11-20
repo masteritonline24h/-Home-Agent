@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="400dp"
+    android:height="300dp"
+    android:viewportWidth="400"
+    android:viewportHeight="300">
+    <path android:pathData="M0,0h400v300h-400z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:startX="0" android:startY="0" android:endX="400" android:endY="300" android:type="linear">
+                <item android:color="#FFDDF0E8" android:offset="0"/>
+                <item android:color="#FFB8DDD0" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Rolling hills -->
+    <path android:fillColor="#FF4F9B82" android:pathData="M0,170 Q110,120 220,165 T400,150 L400,300 L0,300 Z"/>
+    <!-- Prime zoned land plot grid -->
+    <path android:fillColor="#FF21715A" android:pathData="M60,185 L340,185 L370,270 L30,270 Z"/>
+    <path android:fillColor="#FFF6EFE2" android:pathData="M60,185 L340,185 L342,190 L58,190 Z M30,266 L370,266 L370,270 L30,270 Z M200,185 L204,185 L204,270 L200,270 Z" android:fillAlpha="0.65"/>
+    <!-- Location pin badge -->
+    <path android:fillColor="#FFC86D3B" android:pathData="M200,90 C178,90 160,108 160,130 C160,162 200,198 200,198 C200,198 240,162 240,130 C240,108 222,90 200,90 Z"/>
+    <path android:fillColor="#FFFDFBF7" android:pathData="M200,115m-14,0a14,14 0,1 1,28 0a14,14 0,1 1,-28 0"/>
+</vector>
